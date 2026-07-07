@@ -1,0 +1,10 @@
+# Default owner for everything in the repo
+* @vamsimorla3
+
+# Per-directory ownership (documents intended team structure,
+# even though currently all paths route to the same owner)
+/frontend/ @vamsimorla3
+/backend/ @vamsimorla3
+/infrastructure/ @vamsimorla3
+/k8s/ @vamsimorla3
+/.github/workflows/ @vamsimorla3
