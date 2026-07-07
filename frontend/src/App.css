@@ -1,0 +1,68 @@
+.app {
+  max-width: 500px;
+  margin: 60px auto;
+  padding: 20px;
+  font-family: system-ui, sans-serif;
+  text-align: center;
+}
+
+.api-status {
+  font-size: 14px;
+  color: #888;
+}
+
+.error {
+  color: #e74c3c;
+  font-weight: bold;
+}
+
+.add-form {
+  display: flex;
+  gap: 8px;
+  margin: 20px 0;
+}
+
+.add-form input {
+  flex: 1;
+  padding: 8px;
+  font-size: 16px;
+}
+
+.add-form button {
+  padding: 8px 16px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.task-list {
+  list-style: none;
+  padding: 0;
+  text-align: left;
+}
+
+.task-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #333;
+}
+
+.task-list li span {
+  cursor: pointer;
+  flex: 1;
+}
+
+.task-list li.done span {
+  text-decoration: line-through;
+  color: #888;
+}
+
+.task-list li button {
+  background: #e74c3c;
+  color: white;
+  border: none;
+  padding: 4px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
