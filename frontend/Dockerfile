@@ -8,20 +8,22 @@ RUN npm ci
 
 COPY . .
 
-# Accept the API URL as a build argument, and expose it to Vite as an env var
 ARG VITE_API_URL
 ENV VITE_API_URL=$VITE_API_URL
 
 RUN npm run build
 
-# ---- Stage 2: Serve with Nginx ----
-FROM nginx:alpine
+# ---- Stage 2: Serve with Nginx (non-root) ----
+FROM nginxinc/nginx-unprivileged:alpine
 
-RUN rm /etc/nginx/conf.d/default.conf
+RUN rm -f /etc/nginx/conf.d/default.conf
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 COPY --from=build /app/dist /usr/share/nginx/html
 
-EXPOSE 80
+HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
+  CMD wget --no-verbose --tries=1 --spider http://localhost:8080/ || exit 1
+
+EXPOSE 8080
 
 CMD ["nginx", "-g", "daemon off;"]
