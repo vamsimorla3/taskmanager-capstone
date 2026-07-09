@@ -151,3 +151,38 @@ jobs:
         with:
           sarif_file: 'trivy-config-results.sarif'
           category: 'trivy-config'
+
+  docker-build:
+    name: Docker Build
+    runs-on: ubuntu-latest
+    needs: [lint, test, trivy-fs, trivy-config]
+    strategy:
+      matrix:
+        project: [backend, frontend]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build image
+        uses: docker/build-push-action@v6
+        with:
+          context: ${{ matrix.project }}
+          push: false
+          tags: taskmanager-${{ matrix.project }}:${{ github.sha }}
+          build-args: |
+            ${{ matrix.project == 'frontend' && 'VITE_API_URL=http://localhost:3000' || '' }}
+
+      # ECR push is intentionally not implemented yet — the ECR repository
+      # and IAM/OIDC role are created in Phase 4 (Terraform). Once that
+      # infrastructure exists, this job will be extended with:
+      #   - configure-aws-credentials (OIDC, no long-lived keys)
+      #   - docker/login-action against ECR
+      #   - push: true, tags including the ECR repository URI
+      - name: ECR push (pending Phase 4 infrastructure)
+        run: |
+          echo "Skipping ECR push — ECR repository and OIDC role are provisioned in Phase 4."
+          echo "Image built successfully and tagged as taskmanager-${{ matrix.project }}:${{ github.sha }}"
