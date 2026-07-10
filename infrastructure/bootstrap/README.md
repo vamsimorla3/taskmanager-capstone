@@ -28,3 +28,18 @@ terraform apply
 Do not run `terraform destroy` on this module unless you're certain no
 other Terraform module still depends on this backend — doing so would
 delete the state for every other module.
+
+## Known accepted findings (Trivy)
+
+Two low-severity Trivy findings are intentionally not addressed:
+
+- **S3 bucket logging disabled** (AWS-0089) — would require a separate
+  log-destination bucket solely to hold access logs for this one bucket.
+  Given this bucket only stores Terraform state (not user-facing data),
+  the operational overhead isn't justified for this project's scale.
+- **DynamoDB CMK encryption** (AWS-0025) — the table already uses
+  AWS-managed encryption at rest; a customer-managed key adds cost and
+  complexity without meaningful additional protection for a lock table
+  containing no sensitive data itself (only lock metadata).
+
+Both are documented here as deliberate scope decisions, not oversights.
