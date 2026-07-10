@@ -9,3 +9,11 @@ output "public_subnet_ids" {
 output "private_subnet_ids" {
   value = module.vpc.private_subnet_ids
 }
+
+output "db_endpoint" {
+  value = module.rds.db_endpoint
+}
+
+output "db_secret_arn" {
+  value = module.rds.db_secret_arn
+}
