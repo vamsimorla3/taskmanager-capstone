@@ -12,3 +12,9 @@ module "rds" {
   vpc_cidr           = module.vpc.vpc_cidr
   private_subnet_ids = module.vpc.private_subnet_ids
 }
+
+module "ecr" {
+  source = "../../modules/ecr"
+
+  project_name = var.project_name
+}
