@@ -46,3 +46,9 @@ variable "project_name_for_kms" {
   type        = string
   default     = null
 }
+
+variable "public_access_cidrs" {
+  description = "CIDR blocks allowed to reach the EKS public API endpoint"
+  type        = list(string)
+  default     = ["0.0.0.0/0"]
+}

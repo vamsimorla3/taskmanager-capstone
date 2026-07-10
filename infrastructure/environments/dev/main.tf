@@ -13,6 +13,7 @@ module "eks" {
   public_subnet_ids  = module.vpc.public_subnet_ids
 
   rds_security_group_id = module.rds.db_security_group_id
+  public_access_cidrs    = [var.my_ip_cidr]
 }
 
 module "rds" {
