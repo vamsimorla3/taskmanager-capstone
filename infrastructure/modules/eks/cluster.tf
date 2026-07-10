@@ -41,6 +41,17 @@ resource "aws_vpc_security_group_egress_rule" "cluster_all_outbound" {
 }
 
 # ---- The cluster itself ----
+resource "aws_kms_key" "eks_secrets" {
+  description             = "KMS key for encrypting EKS Kubernetes secrets"
+  deletion_window_in_days = 7
+  enable_key_rotation     = true
+}
+
+resource "aws_kms_alias" "eks_secrets" {
+  name          = "alias/${var.project_name}-eks-secrets"
+  target_key_id = aws_kms_key.eks_secrets.key_id
+}
+
 resource "aws_eks_cluster" "main" {
   name     = var.project_name
   role_arn = aws_iam_role.cluster.arn
@@ -54,6 +65,13 @@ resource "aws_eks_cluster" "main" {
   }
 
   enabled_cluster_log_types = ["api", "audit", "authenticator", "controllerManager", "scheduler"]
+
+  encryption_config {
+    resources = ["secrets"]
+    provider {
+      key_arn = aws_kms_key.eks_secrets.arn
+    }
+  }
 
   depends_on = [aws_iam_role_policy_attachment.cluster_policy]
 

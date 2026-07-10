@@ -52,3 +52,17 @@ nodes.
 aws eks update-kubeconfig --region us-east-1 --name <project_name>
 kubectl get nodes
 ```
+
+## Known accepted findings (Trivy)
+
+- **Unrestricted security group egress** (AWS-0104) — the cluster
+  security group needs outbound internet access (via NAT gateway) to
+  reach AWS API endpoints (EC2, ECR, STS, CloudWatch) for normal control
+  plane operation. Properly restricting this would require VPC Interface
+  Endpoints for every AWS service the cluster touches — a legitimate
+  hardening step, but out of scope for this project's current stage.
+- **Public endpoint access enabled, open CIDR** (AWS-0040, AWS-0041) —
+  already documented above under Design Decisions. Enables `kubectl`
+  access from a personal laptop without a VPN/bastion host. A production
+  environment should disable public access entirely or restrict
+  `public_access_cidrs` to specific known IPs.

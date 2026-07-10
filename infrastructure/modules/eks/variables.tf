@@ -40,3 +40,9 @@ variable "rds_security_group_id" {
   type        = string
   default     = null
 }
+
+variable "project_name_for_kms" {
+  description = "Internal - do not set directly"
+  type        = string
+  default     = null
+}
