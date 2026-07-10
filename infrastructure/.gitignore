@@ -1,0 +1,12 @@
+# Local state files - the bootstrap module is the ONE exception
+# that keeps state locally (it creates the remote backend itself)
+**/.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+!bootstrap/terraform.tfvars.example
+crash.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
