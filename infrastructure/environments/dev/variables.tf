@@ -7,3 +7,8 @@ variable "project_name" {
   type    = string
   default = "taskmanager-capstone"
 }
+
+variable "my_ip_cidr" {
+  description = "Your public IP in CIDR notation, for restricting EKS API access"
+  type        = string
+}
