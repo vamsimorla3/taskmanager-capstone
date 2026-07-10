@@ -72,3 +72,22 @@ kubectl get nodes
 
 Update `my_ip_cidr` in `infrastructure/environments/dev/terraform.tfvars`,
 then run `terraform apply` in that directory.
+
+## Public access tradeoff (explicit decision)
+
+Trivy's AWS-0040 check flags any public API endpoint access at all,
+regardless of CIDR restriction. Two real options exist:
+
+- **Fully private cluster** (`endpoint_public_access = false`) — requires
+  a VPN or bastion EC2 host inside the VPC to run `kubectl` from, adding
+  real infrastructure (another host to provision, secure, and maintain).
+- **Public access restricted to a single IP** (current approach) — no
+  extra infrastructure, but Trivy will always flag this check as long as
+  public access is enabled at all, independent of how narrow the CIDR is.
+
+**Decision:** this project keeps public access restricted to the
+operator's IP (Option B), accepting that Trivy will continue flagging
+AWS-0040 as a known, deliberate tradeoff — not because the finding is
+wrong, but because adding a bastion host is genuine additional scope
+better suited to a follow-up phase. The practical risk is meaningfully
+reduced by the IP restriction even though the check itself is binary.
