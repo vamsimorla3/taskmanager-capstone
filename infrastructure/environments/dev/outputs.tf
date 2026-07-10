@@ -17,3 +17,7 @@ output "db_endpoint" {
 output "db_secret_arn" {
   value = module.rds.db_secret_arn
 }
+
+output "ecr_repository_urls" {
+  value = module.ecr.repository_urls
+}
