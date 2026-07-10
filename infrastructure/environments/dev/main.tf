@@ -4,6 +4,17 @@ module "vpc" {
   project_name = var.project_name
 }
 
+module "eks" {
+  source = "../../modules/eks"
+
+  project_name       = var.project_name
+  vpc_id             = module.vpc.vpc_id
+  private_subnet_ids = module.vpc.private_subnet_ids
+  public_subnet_ids  = module.vpc.public_subnet_ids
+
+  rds_security_group_id = module.rds.db_security_group_id
+}
+
 module "rds" {
   source = "../../modules/rds"
 
@@ -11,6 +22,8 @@ module "rds" {
   vpc_id             = module.vpc.vpc_id
   vpc_cidr           = module.vpc.vpc_cidr
   private_subnet_ids = module.vpc.private_subnet_ids
+
+  allowed_security_group_ids = [module.eks.cluster_security_group_id]
 }
 
 module "ecr" {
