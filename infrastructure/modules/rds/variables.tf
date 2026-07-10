@@ -30,3 +30,9 @@ variable "allowed_security_group_ids" {
   type        = list(string)
   default     = []
 }
+
+variable "vpc_cidr" {
+  description = "VPC CIDR block, used to scope RDS security group egress"
+  type        = string
+  default     = "10.0.0.0/16"
+}

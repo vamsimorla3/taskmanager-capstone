@@ -34,3 +34,14 @@ plaintext-only, never typed into any file).
 - `db_endpoint`
 - `db_security_group_id`
 - `db_secret_arn`
+
+## Known accepted findings (Trivy)
+
+- **RDS Deletion Protection disabled** (AWS-0177) — intentional, see
+  design decisions above. This is a dev/personal project; deletion
+  protection would block routine `terraform destroy` between sessions.
+- **Secrets Manager should use customer-managed key** (AWS-0098) — the
+  secret already uses AWS-managed encryption at rest. A customer-managed
+  KMS key adds cost/complexity without meaningful additional protection
+  for this project's threat model (same reasoning applied to the
+  DynamoDB lock table in the bootstrap module).

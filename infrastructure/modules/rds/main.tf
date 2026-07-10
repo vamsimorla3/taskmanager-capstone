@@ -33,10 +33,15 @@ resource "aws_vpc_security_group_ingress_rule" "rds_from_app" {
   description                  = "Postgres access from application security group"
 }
 
-resource "aws_vpc_security_group_egress_rule" "rds_all_outbound" {
+# Egress restricted to the VPC's own CIDR range rather than the whole
+# internet - RDS's own AWS-managed traffic (backups, patching, etc.)
+# happens outside this security group's control, so there's no need
+# for broad outbound access here.
+resource "aws_vpc_security_group_egress_rule" "rds_vpc_outbound" {
   security_group_id = aws_security_group.rds.id
-  cidr_ipv4          = "0.0.0.0/0"
+  cidr_ipv4          = var.vpc_cidr
   ip_protocol        = "-1"
+  description        = "Allow outbound traffic within the VPC only"
 }
 
 resource "aws_db_instance" "main" {
@@ -56,6 +61,9 @@ resource "aws_db_instance" "main" {
   db_subnet_group_name   = aws_db_subnet_group.main.name
   vpc_security_group_ids = [aws_security_group.rds.id]
 
+  iam_database_authentication_enabled = true
+  performance_insights_enabled        = true
+
   # Not publicly accessible - only reachable from within the VPC
   publicly_accessible = false
 
@@ -64,6 +72,9 @@ resource "aws_db_instance" "main" {
   backup_retention_period = 7
   skip_final_snapshot     = true
 
+  # Deliberately false for this dev/personal project, to allow easy
+  # teardown between work sessions. A production environment should
+  # set this to true. See module README for full rationale.
   deletion_protection = false
 
   tags = {
