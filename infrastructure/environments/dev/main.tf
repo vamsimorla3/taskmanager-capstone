@@ -36,3 +36,12 @@ module "github_oidc" {
   ecr_repository_arns = values(module.ecr.repository_arns)
   eks_cluster_arn      = module.eks.cluster_arn
 }
+
+module "eso_irsa" {
+  source = "../../modules/eso-irsa"
+
+  project_name       = var.project_name
+  oidc_provider_arn  = module.eks.oidc_provider_arn
+  oidc_issuer_url    = replace(module.eks.oidc_issuer_url, "https://", "")
+  secret_arns        = [module.rds.db_secret_arn]
+}
