@@ -68,7 +68,9 @@ spec:
           securityContext:
             runAsNonRoot: true
             allowPrivilegeEscalation: false
-            readOnlyRootFilesystem: false
+            readOnlyRootFilesystem: true
+            seccompProfile:
+              type: RuntimeDefault
             runAsUser: 100
             capabilities:
               drop: ["ALL"]

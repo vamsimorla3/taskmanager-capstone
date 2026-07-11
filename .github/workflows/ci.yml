@@ -83,6 +83,7 @@ jobs:
           DB_USER: taskadmin
           DB_PASSWORD: devpassword123
           DB_NAME: taskmanager
+          DB_SSL: "false"
         run: npm test
 
       - name: Upload coverage report
