@@ -53,3 +53,11 @@ module "alb_controller_irsa" {
   oidc_provider_arn  = module.eks.oidc_provider_arn
   oidc_issuer_url    = replace(module.eks.oidc_issuer_url, "https://", "")
 }
+
+module "fluentbit_irsa" {
+  source = "../../modules/fluentbit-irsa"
+
+  project_name       = var.project_name
+  oidc_provider_arn  = module.eks.oidc_provider_arn
+  oidc_issuer_url    = replace(module.eks.oidc_issuer_url, "https://", "")
+}
