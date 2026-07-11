@@ -51,3 +51,15 @@ image is pushed via CI, these manifests need a corresponding update
 version — image tags are not automatically tracked. A GitOps tool
 (ArgoCD/Flux) or a CD pipeline step that patches the deployment image
 would automate this in a more mature setup.
+
+## Monitoring
+
+A `ServiceMonitor` scrapes the backend's `/metrics` endpoint every 15s.
+
+**Important:** the `backend` Service needs `metadata.labels` (not just
+`spec.selector`) matching the ServiceMonitor's `selector.matchLabels` -
+these are two genuinely different things. `spec.selector` controls
+which pods the Service routes traffic to; `metadata.labels` is what
+Prometheus Operator's ServiceMonitor actually matches against to find
+the Service object itself. Missing the latter silently results in zero
+scrape targets, with no error - only "No targets" in Prometheus's UI.
