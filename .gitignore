@@ -22,3 +22,4 @@ Thumbs.db
 
 # Docker
 *.log
+k8s/monitoring/alertmanager-values.local.yaml

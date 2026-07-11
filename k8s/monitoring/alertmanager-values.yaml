@@ -1,0 +1,32 @@
+# NOTE: KubeControllerManagerDown and KubeSchedulerDown are disabled below
+# because EKS is a managed control plane - AWS runs these components
+# outside the cluster's visibility, so Prometheus can never successfully
+# scrape them. These alerts would otherwise fire permanently and are not
+# actionable on EKS.
+defaultRules:
+  rules:
+    kubeControllerManager: false
+    kubeScheduler: false
+
+alertmanager:
+  config:
+    global:
+      resolve_timeout: 5m
+    route:
+      group_by: ['alertname', 'namespace']
+      group_wait: 30s
+      group_interval: 5m
+      repeat_interval: 4h
+      receiver: 'slack-notifications'
+      routes:
+        - receiver: 'slack-notifications'
+          matchers:
+            - severity =~ "critical|warning"
+    receivers:
+      - name: 'slack-notifications'
+        slack_configs:
+          - api_url: 'SLACK_WEBHOOK_URL_PLACEHOLDER'
+            channel: '#alerts'
+            send_resolved: true
+            title: '{{ .Status | toUpper }}: {{ .CommonLabels.alertname }}'
+            text: '{{ range .Alerts }}{{ .Annotations.description }}{{ "\n" }}{{ end }}'
