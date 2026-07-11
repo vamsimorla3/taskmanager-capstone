@@ -1,0 +1,10 @@
+serviceAccount:
+  create: false
+  name: fluent-bit
+
+cloudWatchLogs:
+  enabled: true
+  region: us-east-1
+  logGroupName: "/aws/eks/taskmanager-capstone/application-logs"
+  logStreamPrefix: "fluentbit-"
+  autoCreateGroup: false
