@@ -37,3 +37,7 @@ output "github_actions_role_arn" {
 output "eso_role_arn" {
   value = module.eso_irsa.eso_role_arn
 }
+
+output "alb_controller_role_arn" {
+  value = module.alb_controller_irsa.alb_controller_role_arn
+}
