@@ -41,3 +41,11 @@ output "eso_role_arn" {
 output "alb_controller_role_arn" {
   value = module.alb_controller_irsa.alb_controller_role_arn
 }
+
+output "fluentbit_role_arn" {
+  value = module.fluentbit_irsa.fluentbit_role_arn
+}
+
+output "cloudwatch_log_group_name" {
+  value = module.fluentbit_irsa.log_group_name
+}
