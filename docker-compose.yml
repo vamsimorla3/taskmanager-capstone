@@ -24,6 +24,7 @@ services:
     environment:
       PORT: 3000
       DB_HOST: db
+      DB_SSL: "false"
       DB_PORT: 5432
       DB_USER: taskadmin
       DB_PASSWORD: devpassword123

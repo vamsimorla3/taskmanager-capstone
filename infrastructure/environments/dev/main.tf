@@ -19,7 +19,7 @@ module "rds" {
   vpc_id             = module.vpc.vpc_id
   vpc_cidr           = module.vpc.vpc_cidr
   private_subnet_ids = module.vpc.private_subnet_ids
-  allowed_security_group_ids = [module.eks.cluster_security_group_id]
+  allowed_security_group_ids = [module.eks.cluster_security_group_id, module.eks.node_security_group_id]
 }
 
 module "ecr" {
