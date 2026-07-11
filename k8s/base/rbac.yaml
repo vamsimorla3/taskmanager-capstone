@@ -1,0 +1,36 @@
+# Dedicated service account for the backend pods - never use 'default'
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: taskmanager-backend
+  namespace: taskmanager
+
+---
+# Minimal role: the backend app itself doesn't need to talk to the
+# Kubernetes API at all today. This role exists so that if a future
+# feature needs to read its own pod info or similar, permissions can be
+# added deliberately rather than starting from cluster-admin.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: taskmanager-backend-role
+  namespace: taskmanager
+rules:
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get", "list"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: taskmanager-backend-binding
+  namespace: taskmanager
+subjects:
+  - kind: ServiceAccount
+    name: taskmanager-backend
+    namespace: taskmanager
+roleRef:
+  kind: Role
+  name: taskmanager-backend-role
+  apiGroup: rbac.authorization.k8s.io

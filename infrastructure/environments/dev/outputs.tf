@@ -33,3 +33,7 @@ output "eks_cluster_endpoint" {
 output "github_actions_role_arn" {
   value = module.github_oidc.github_actions_role_arn
 }
+
+output "eso_role_arn" {
+  value = module.eso_irsa.eso_role_arn
+}
