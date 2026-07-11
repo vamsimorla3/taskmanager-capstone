@@ -26,3 +26,28 @@ for the install command if setting up a fresh cluster).
 
 Scale-up reacts within 30s; scale-down waits 120s of sustained low usage
 to avoid flapping.
+
+## Ingress (ALB)
+
+A single Ingress routes public traffic through one AWS Application Load
+Balancer to both services:
+
+- `/api`, `/health`, `/metrics` → backend
+- `/` (everything else) → frontend
+
+**HTTPS is not yet configured** — this is currently HTTP-only, since
+TLS requires a real domain name and an ACM certificate, neither of
+which exist for this project yet. This is a documented near-term
+follow-up, not an oversight; a production deployment would add:
+- A registered domain (Route 53 or external registrar)
+- An ACM certificate for that domain
+- `alb.ingress.kubernetes.io/certificate-arn` annotation + HTTPS listener
+
+## Image tags
+
+Deployment manifests currently pin specific image SHA tags. When a new
+image is pushed via CI, these manifests need a corresponding update
+(`kubectl apply` after editing the tag) to actually deploy the new
+version — image tags are not automatically tracked. A GitOps tool
+(ArgoCD/Flux) or a CD pipeline step that patches the deployment image
+would automate this in a more mature setup.
