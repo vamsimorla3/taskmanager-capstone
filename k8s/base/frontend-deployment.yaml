@@ -15,6 +15,10 @@ spec:
       labels:
         app: frontend
     spec:
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: frontend
           image: 381492217656.dkr.ecr.us-east-1.amazonaws.com/taskmanager-capstone-frontend:0dd94b9f9f51d6df53292905f8c1b2d930a5c446

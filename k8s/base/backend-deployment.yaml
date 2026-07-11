@@ -16,6 +16,10 @@ spec:
         app: backend
     spec:
       serviceAccountName: taskmanager-backend
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: backend
           image: 381492217656.dkr.ecr.us-east-1.amazonaws.com/taskmanager-capstone-backend:0dd94b9f9f51d6df53292905f8c1b2d930a5c446
