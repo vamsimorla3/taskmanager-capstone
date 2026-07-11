@@ -12,3 +12,17 @@
   permanently accepted risk — both UIDs are still non-root and
   non-privileged today, just not above the specific threshold Trivy's
   rule checks for.
+
+## Autoscaling
+
+Both `backend` and `frontend` have HorizontalPodAutoscalers:
+
+- **backend**: 2-6 replicas, scales on CPU (70%) or memory (80%)
+- **frontend**: 2-4 replicas, scales on CPU (70%) only
+
+Requires `metrics-server` (installed cluster-wide, not part of this
+repo's manifests — see [metrics-server docs](https://github.com/kubernetes-sigs/metrics-server)
+for the install command if setting up a fresh cluster).
+
+Scale-up reacts within 30s; scale-down waits 120s of sustained low usage
+to avoid flapping.
